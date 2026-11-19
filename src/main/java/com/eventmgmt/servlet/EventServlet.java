@@ -104,11 +104,19 @@ public class EventServlet extends HttpServlet {
             }
 
             String name     = body.getString("name").trim();
-            String date     = body.optString("date",  "");
-            String venue    = body.optString("venue", "");
-            int    capacity = body.optInt("capacity", 100);
+            String date     = body.optString("date", "").trim();
+            if (date.isEmpty()) {
+                date = java.time.LocalDate.now().plusDays(7).toString();
+            }
+            String venue    = body.optString("venue", "").trim();
+            if (venue.isEmpty()) {
+                venue = "Main Auditorium";
+            }
+            int capacity = body.optInt("capacity", 100);
+            if (capacity <= 0) capacity = 100;
 
             int newId = DatabaseManager.getInstance().createEvent(name, date, venue, capacity);
+            System.out.println("[API] POST /api/events created event ID " + newId + ": " + name);
 
             JSONObject result = new JSONObject();
             result.put("success", true);

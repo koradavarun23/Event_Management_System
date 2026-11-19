@@ -18,6 +18,7 @@ public class Registration {
     // --- Transient fields (not in DB, filled by JOIN query) ---
     private String studentName;
     private String studentEmail;
+    private String eventName;
 
     // --- Getters ---
 
@@ -28,6 +29,7 @@ public class Registration {
     public String getStatus()       { return status; }
     public String getStudentName()  { return studentName; }
     public String getStudentEmail() { return studentEmail; }
+    public String getEventName()    { return eventName; }
 
     // --- Setters ---
 
@@ -38,6 +40,7 @@ public class Registration {
     public void setStatus(String status)           { this.status = status; }
     public void setStudentName(String studentName) { this.studentName = studentName; }
     public void setStudentEmail(String studentEmail) { this.studentEmail = studentEmail; }
+    public void setEventName(String eventName)     { this.eventName = eventName; }
 
     @Override
     public String toString() {

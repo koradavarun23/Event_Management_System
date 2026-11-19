@@ -459,7 +459,10 @@
             <h2>📊 Dashboard</h2>
             <p>Overview of your campus events and activities</p>
           </div>
-          <button class="btn btn-outline" onclick="loadDashboard()">🔄 Refresh</button>
+          <div style="display:flex;gap:10px;">
+            <button class="btn btn-primary" onclick="openModal('modal-event')">➕ Create Event</button>
+            <button class="btn btn-outline" onclick="loadDashboard()">🔄 Refresh</button>
+          </div>
         </div>
 
         <div class="stats-grid">
@@ -615,30 +618,32 @@
   <div class="modal">
     <div class="modal-header">
       <h3>🎉 Create New Event</h3>
-      <button class="modal-close" onclick="closeModal('modal-event')">×</button>
+      <button type="button" class="modal-close" onclick="closeModal('modal-event')">×</button>
     </div>
-    <div class="modal-body">
-      <div class="form-group">
-        <label>Event Name</label>
-        <input type="text" id="ev-name" placeholder="e.g. Annual Tech Symposium" />
+    <form id="form-create-event" onsubmit="event.preventDefault(); handleCreateEvent();">
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Event Name *</label>
+          <input type="text" id="ev-name" placeholder="e.g. Annual Tech Symposium" required />
+        </div>
+        <div class="form-group">
+          <label>Date</label>
+          <input type="date" id="ev-date" />
+        </div>
+        <div class="form-group">
+          <label>Venue</label>
+          <input type="text" id="ev-venue" placeholder="e.g. Main Auditorium" />
+        </div>
+        <div class="form-group">
+          <label>Capacity</label>
+          <input type="number" id="ev-capacity" placeholder="100" min="1" value="100" />
+        </div>
       </div>
-      <div class="form-group">
-        <label>Date</label>
-        <input type="date" id="ev-date" />
+      <div class="modal-footer">
+        <button type="button" class="btn-cancel-modal" onclick="closeModal('modal-event')">Cancel</button>
+        <button type="submit" id="btn-create-event-submit" class="btn-modal-submit">🎉 Create Event</button>
       </div>
-      <div class="form-group">
-        <label>Venue</label>
-        <input type="text" id="ev-venue" placeholder="e.g. Main Auditorium" />
-      </div>
-      <div class="form-group">
-        <label>Capacity</label>
-        <input type="number" id="ev-capacity" placeholder="100" min="1" />
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn-cancel-modal" onclick="closeModal('modal-event')">Cancel</button>
-      <button class="btn-modal-submit" onclick="createEvent()">🎉 Create Event</button>
-    </div>
+    </form>
   </div>
 </div>
 
@@ -647,22 +652,24 @@
   <div class="modal">
     <div class="modal-header">
       <h3>👥 Add New Student</h3>
-      <button class="modal-close" onclick="closeModal('modal-student')">×</button>
+      <button type="button" class="modal-close" onclick="closeModal('modal-student')">×</button>
     </div>
-    <div class="modal-body">
-      <div class="form-group">
-        <label>Full Name</label>
-        <input type="text" id="st-name" placeholder="e.g. Priya Sharma" />
+    <form id="form-add-student" onsubmit="event.preventDefault(); addStudent();">
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="st-name" placeholder="e.g. Priya Sharma" required />
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="st-email" placeholder="e.g. priya@college.edu" required />
+        </div>
       </div>
-      <div class="form-group">
-        <label>Email Address</label>
-        <input type="email" id="st-email" placeholder="e.g. priya@college.edu" />
+      <div class="modal-footer">
+        <button type="button" class="btn-cancel-modal" onclick="closeModal('modal-student')">Cancel</button>
+        <button type="submit" class="btn-modal-submit">👥 Add Student</button>
       </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn-cancel-modal" onclick="closeModal('modal-student')">Cancel</button>
-      <button class="btn-modal-submit" onclick="addStudent()">👥 Add Student</button>
-    </div>
+    </form>
   </div>
 </div>
 
@@ -671,28 +678,30 @@
   <div class="modal">
     <div class="modal-header">
       <h3>📋 Register Student for Event</h3>
-      <button class="modal-close" onclick="closeModal('modal-register')">×</button>
+      <button type="button" class="modal-close" onclick="closeModal('modal-register')">×</button>
     </div>
-    <div class="modal-body">
-      <div class="form-group">
-        <label>Select Event</label>
-        <select id="reg-event-id">
-          <option value="">— choose an event —</option>
-        </select>
+    <form id="form-register-student" onsubmit="event.preventDefault(); registerStudent();">
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Select Event</label>
+          <select id="reg-event-id" required>
+            <option value="">— choose an event —</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Student Name</label>
+          <input type="text" id="reg-st-name" placeholder="e.g. Arjun Kumar" required />
+        </div>
+        <div class="form-group">
+          <label>Student Email</label>
+          <input type="email" id="reg-st-email" placeholder="e.g. arjun@college.edu" required />
+        </div>
       </div>
-      <div class="form-group">
-        <label>Student Name</label>
-        <input type="text" id="reg-st-name" placeholder="e.g. Arjun Kumar" />
+      <div class="modal-footer">
+        <button type="button" class="btn-cancel-modal" onclick="closeModal('modal-register')">Cancel</button>
+        <button type="submit" class="btn-modal-submit">📋 Register</button>
       </div>
-      <div class="form-group">
-        <label>Student Email</label>
-        <input type="email" id="reg-st-email" placeholder="e.g. arjun@college.edu" />
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn-cancel-modal" onclick="closeModal('modal-register')">Cancel</button>
-      <button class="btn-modal-submit" onclick="registerStudent()">📋 Register</button>
-    </div>
+    </form>
   </div>
 </div>
 
@@ -725,7 +734,10 @@
 <script>
   'use strict';
 
-  const API = '/api';
+  // Determine API base URL: works both when served directly from :8081 and via file:// or LiveServer
+  const API = (window.location.protocol.startsWith('http') && window.location.port === '8081')
+    ? '/api'
+    : 'http://localhost:8081/api';
   let _eventsCache = [];
 
   /* ===================== UTILS ===================== */
@@ -748,7 +760,25 @@
     setTimeout(function() { if (t.parentNode) t.remove(); }, 3700);
   }
 
-  function openModal(id)  { document.getElementById(id).classList.add('open'); }
+  function openModal(id)  {
+    if (id === 'modal-register') {
+      apiFetch('/events').then(function(events) {
+        _eventsCache = events;
+        populateEventDropdowns(events);
+      }).catch(function() {});
+    }
+    if (id === 'modal-event') {
+      var dateInput = document.getElementById('ev-date');
+      if (dateInput && !dateInput.value) {
+        var d = new Date();
+        d.setDate(d.getDate() + 7);
+        dateInput.value = d.toISOString().split('T')[0];
+      }
+      var capInput = document.getElementById('ev-capacity');
+      if (capInput && !capInput.value) capInput.value = '100';
+    }
+    document.getElementById(id).classList.add('open');
+  }
   function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
   // Close on overlay click
@@ -790,6 +820,10 @@
     var res = await fetch(API + path, Object.assign({}, options, { headers: headers }));
     if (!res.ok) {
       var err = await res.text().catch(function() { return 'Unknown error'; });
+      try {
+        var jsonErr = JSON.parse(err);
+        if (jsonErr && jsonErr.error) err = jsonErr.error;
+      } catch (_) {}
       throw new Error(err || 'HTTP ' + res.status);
     }
     return res.json().catch(function() { return {}; });
@@ -837,6 +871,7 @@
           '  <div class="empty-icon">🎉</div>' +
           '  <h3>No events yet</h3>' +
           '  <p>Create your first event to get started!</p>' +
+          '  <button class="btn btn-primary" onclick="openModal(\'modal-event\')" style="margin-top:14px">➕ Create First Event</button>' +
           '</div>';
         return;
       }
@@ -879,6 +914,7 @@
           '  <div class="empty-icon">🎉</div>' +
           '  <h3>No events yet</h3>' +
           '  <p>Click "Create New Event" to add one.</p>' +
+          '  <button class="btn btn-primary" onclick="openModal(\'modal-event\')" style="margin-top:14px">➕ Create New Event</button>' +
           '</div>';
         return;
       }
@@ -928,28 +964,89 @@
     }
   }
 
-  async function createEvent() {
-    var name     = document.getElementById('ev-name').value.trim();
-    var date     = document.getElementById('ev-date').value;
-    var venue    = document.getElementById('ev-venue').value.trim();
-    var capacity = parseInt(document.getElementById('ev-capacity').value) || 100;
-    if (!name || !date || !venue) { toast('Please fill all required fields.', 'warning'); return; }
+  async function handleCreateEvent() {
+    window.handleCreateEvent = handleCreateEvent;
+    var submitBtn = document.getElementById('btn-create-event-submit');
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.innerText = '⏳ Creating...';
+    }
 
-    showSpinner();
     try {
-      await apiFetch('/events', {
-        method: 'POST',
-        body: JSON.stringify({ name: name, date: date, venue: venue, capacity: capacity })
-      });
+      var nameEl  = document.getElementById('ev-name');
+      var dateEl  = document.getElementById('ev-date');
+      var venueEl = document.getElementById('ev-venue');
+      var capEl   = document.getElementById('ev-capacity');
+
+      var name     = nameEl ? nameEl.value.trim() : '';
+      var date     = dateEl ? dateEl.value.trim() : '';
+      var venue    = venueEl ? venueEl.value.trim() : '';
+      var capInput = capEl ? capEl.value.trim() : '';
+      var capacity = capInput ? parseInt(capInput, 10) : 100;
+      if (isNaN(capacity) || capacity <= 0) capacity = 100;
+
+      if (!name) {
+        toast('Please enter an event name.', 'warning');
+        if (nameEl) nameEl.focus();
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.innerText = '🎉 Create Event'; }
+        return;
+      }
+      if (!date) {
+        var d = new Date();
+        d.setDate(d.getDate() + 7);
+        date = d.toISOString().split('T')[0];
+      }
+      if (!venue) {
+        venue = 'Main Auditorium';
+      }
+
+      showSpinner();
+
+      var payload = JSON.stringify({ name: name, date: date, venue: venue, capacity: capacity });
+      console.log('Posting event:', payload);
+
+      var res;
+      try {
+        res = await fetch('/api/events', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: payload
+        });
+      } catch (netErr) {
+        console.warn('Relative fetch failed, trying explicit port 8081:', netErr);
+        res = await fetch('http://localhost:8081/api/events', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: payload
+        });
+      }
+
+      if (!res.ok) {
+        var errTxt = await res.text();
+        throw new Error(errTxt || ('HTTP ' + res.status));
+      }
+
+      var resData = await res.json().catch(function() { return {}; });
+      console.log('Event created response:', resData);
+
       closeModal('modal-event');
       clearFields(['ev-name', 'ev-date', 'ev-venue', 'ev-capacity']);
+      if (capEl) capEl.value = '100';
       toast('Event "' + name + '" created successfully! 🎉');
-      loadEvents();
-      loadDashboard();
+
+      await loadEvents();
+      await loadDashboard();
+
     } catch (e) {
+      console.error('Error creating event:', e);
       toast('Failed to create event: ' + e.message, 'error');
+      alert('Event creation error: ' + e.message);
     } finally {
       hideSpinner();
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerText = '🎉 Create Event';
+      }
     }
   }
 
@@ -1071,7 +1168,7 @@
 
       if (!regs.length) {
         tbody.innerHTML =
-          '<tr><td colspan="6"><div class="empty"><div class="empty-icon">📋</div><h3>No registrations</h3><p>Register a student to get started!</p></div></td></tr>';
+          '<tr><td colspan="6"><div class="empty"><div class="empty-icon">📋</div><h3>No registrations</h3><p>Register a student to get started!</p><button class="btn btn-primary" onclick="openModal(\'modal-register\')" style="margin-top:14px">➕ Register Student</button></div></td></tr>';
         return;
       }
 

@@ -257,16 +257,44 @@ public class DatabaseManager {
     }
 
     /**
-     * Return all ACTIVE registrations for a given eventId.
-     * Joins with students so callers can display the student name & email.
+     * Return ALL registrations with student name, student email, and event name joined.
+     */
+    public List<Registration> getAllRegistrations() throws SQLException {
+        List<Registration> list = new ArrayList<>();
+        String sql =
+            "SELECT r.*, s.name AS student_name, s.email AS student_email, e.name AS event_name " +
+            "FROM registrations r " +
+            "LEFT JOIN students s ON r.student_id = s.id " +
+            "LEFT JOIN events e ON r.event_id = e.id " +
+            "ORDER BY r.id DESC";
+
+        try (Connection conn = getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                Registration reg = mapRegistration(rs);
+                reg.setStudentName(rs.getString("student_name"));
+                reg.setStudentEmail(rs.getString("student_email"));
+                reg.setEventName(rs.getString("event_name"));
+                list.add(reg);
+            }
+        }
+        return list;
+    }
+
+    /**
+     * Return all registrations for a given eventId.
+     * Joins with students and events so callers can display student and event info.
      */
     public List<Registration> getRegistrationsByEvent(int eventId) throws SQLException {
         List<Registration> list = new ArrayList<>();
         String sql =
-            "SELECT r.*, s.name AS student_name, s.email AS student_email " +
+            "SELECT r.*, s.name AS student_name, s.email AS student_email, e.name AS event_name " +
             "FROM registrations r " +
-            "JOIN students s ON r.student_id = s.id " +
-            "WHERE r.event_id = ? AND r.status = 'active' " +
+            "LEFT JOIN students s ON r.student_id = s.id " +
+            "LEFT JOIN events e ON r.event_id = e.id " +
+            "WHERE r.event_id = ? " +
             "ORDER BY r.id DESC";
 
         try (Connection conn = getConnection();
@@ -276,9 +304,9 @@ public class DatabaseManager {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Registration reg = mapRegistration(rs);
-                // Attach student info for the response payload
                 reg.setStudentName(rs.getString("student_name"));
                 reg.setStudentEmail(rs.getString("student_email"));
+                reg.setEventName(rs.getString("event_name"));
                 list.add(reg);
             }
         }

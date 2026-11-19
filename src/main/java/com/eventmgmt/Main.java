@@ -44,16 +44,20 @@ public class Main {
 
         // ---- Register API servlets ----
 
-        // Event endpoints  : GET /api/events, POST /api/events, DELETE /api/events/{id}
-        //                     GET /api/events/{id}/capacity
-        context.addServlet(new ServletHolder(new EventServlet()),        "/api/events/*");
+        // Event endpoints  : GET/POST /api/events, DELETE /api/events/{id}, GET /api/events/{id}/capacity
+        ServletHolder eventHolder = new ServletHolder(new EventServlet());
+        context.addServlet(eventHolder, "/api/events");
+        context.addServlet(eventHolder, "/api/events/*");
 
-        // Registration endpoints : POST /api/registrations, GET /api/registrations?eventId=X,
-        //                           DELETE /api/registrations/{id}
-        context.addServlet(new ServletHolder(new RegistrationServlet()), "/api/registrations/*");
+        // Registration endpoints : POST/GET /api/registrations, DELETE /api/registrations/{id}
+        ServletHolder regHolder = new ServletHolder(new RegistrationServlet());
+        context.addServlet(regHolder, "/api/registrations");
+        context.addServlet(regHolder, "/api/registrations/*");
 
-        // Student endpoints : GET /api/students, POST /api/students
-        context.addServlet(new ServletHolder(new StudentServlet()),      "/api/students/*");
+        // Student endpoints : GET/POST /api/students
+        ServletHolder studentHolder = new ServletHolder(new StudentServlet());
+        context.addServlet(studentHolder, "/api/students");
+        context.addServlet(studentHolder, "/api/students/*");
 
         // Dashboard endpoint : GET /api/dashboard
         context.addServlet(new ServletHolder(new DashboardServlet()),    "/api/dashboard");
@@ -68,6 +72,8 @@ public class Main {
             defaultHolder.setInitParameter("resourceBase", new java.io.File("src/main/webapp").getAbsolutePath());
         }
         defaultHolder.setInitParameter("dirAllowed", "false");
+        defaultHolder.setInitParameter("maxCacheSize", "0");
+        defaultHolder.setInitParameter("cacheControl", "no-cache, no-store, must-revalidate");
         context.addServlet(defaultHolder, "/");
 
         // 4. Attach context to server and start

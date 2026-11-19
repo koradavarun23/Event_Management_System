@@ -92,21 +92,21 @@ public class RegistrationServlet extends HttpServlet {
     }
 
     // -----------------------------------------------------------------------
-    // GET /api/registrations?eventId=X
+    // GET /api/registrations  or  GET /api/registrations?eventId=X
     // -----------------------------------------------------------------------
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         setCorsAndContentType(resp);
         try {
             String eventIdParam = req.getParameter("eventId");
-            if (eventIdParam == null || eventIdParam.trim().isEmpty()) {
-                writeJson(resp, 400, error("Query parameter 'eventId' is required"));
-                return;
-            }
+            List<Registration> registrations;
 
-            int eventId = Integer.parseInt(eventIdParam.trim());
-            List<Registration> registrations =
-                    DatabaseManager.getInstance().getRegistrationsByEvent(eventId);
+            if (eventIdParam != null && !eventIdParam.trim().isEmpty()) {
+                int eventId = Integer.parseInt(eventIdParam.trim());
+                registrations = DatabaseManager.getInstance().getRegistrationsByEvent(eventId);
+            } else {
+                registrations = DatabaseManager.getInstance().getAllRegistrations();
+            }
 
             JSONArray arr = new JSONArray();
             for (Registration r : registrations) {
@@ -115,7 +115,9 @@ public class RegistrationServlet extends HttpServlet {
                 obj.put("studentId",    r.getStudentId());
                 obj.put("studentName",  r.getStudentName());
                 obj.put("studentEmail", r.getStudentEmail());
+                obj.put("email",        r.getStudentEmail()); // compatibility
                 obj.put("eventId",      r.getEventId());
+                obj.put("eventName",    r.getEventName() != null ? r.getEventName() : "Event #" + r.getEventId());
                 obj.put("registeredAt", r.getRegisteredAt());
                 obj.put("status",       r.getStatus());
                 arr.put(obj);
@@ -128,6 +130,7 @@ public class RegistrationServlet extends HttpServlet {
             writeJson(resp, 500, error("Server error: " + e.getMessage()));
         }
     }
+
 
     // -----------------------------------------------------------------------
     // DELETE /api/registrations/{id}
