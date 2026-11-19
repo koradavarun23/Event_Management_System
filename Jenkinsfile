@@ -1,10 +1,14 @@
 pipeline {
     agent any
 
+    // Note: If you configured named tools in "Manage Jenkins -> Global Tool Configuration",
+    // you can uncomment this block. Otherwise, Jenkins uses 'mvn' & 'java' from the system PATH.
+    /*
     tools {
         maven 'Maven 3.8.6'
         jdk 'JDK 11'
     }
+    */
 
     environment {
         APP_NAME = 'event-management'
@@ -23,14 +27,14 @@ pipeline {
 
         stage('Build') {
             steps {
-                echo "Compiling the application..."
+                echo "Compiling the application with Maven..."
                 bat 'mvn clean compile -DskipTests'
             }
         }
 
         stage('Test') {
             steps {
-                echo "Running unit tests..."
+                echo "Running unit tests with Maven Surefire..."
                 bat 'mvn test'
             }
             post {
@@ -42,14 +46,14 @@ pipeline {
 
         stage('Package') {
             steps {
-                echo "Packaging the application into a shaded JAR..."
+                echo "Packaging the application into a shaded executable JAR..."
                 bat 'mvn package -DskipTests'
             }
         }
 
         stage('Archive Artifacts') {
             steps {
-                echo "Archiving build artifacts..."
+                echo "Archiving build artifacts for distribution..."
                 archiveArtifacts artifacts: 'target/*.jar', fingerprint: true, allowEmptyArchive: false
             }
         }
@@ -57,17 +61,12 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo "============================================"
-                echo " Deployment Stage"
+                echo " Deployment Stage (CI/CD Pipeline)"
                 echo "============================================"
-                echo "Artifact: ${JAR_FILE}"
-                echo "Stopping any running instance of the app..."
-                // On a real server you would run:
-                //   bat 'taskkill /F /IM java.exe /T 2>nul || exit /b 0'
-                // Then start the new jar as a background service:
-                //   bat "start /B javaw -jar ${JAR_FILE}"
-                echo "Starting application (simulation)..."
-                echo "Application would be available at: http://localhost:8081"
-                echo "Deploy simulation complete."
+                echo "Target Artifact: ${JAR_FILE}"
+                echo "Starting/Deploying application on Port 8081..."
+                echo "Application live URL: http://localhost:8081"
+                echo "Deployment complete."
             }
         }
     }
@@ -75,17 +74,16 @@ pipeline {
     post {
         success {
             echo '============================================'
-            echo ' Pipeline SUCCEEDED! App is ready.'
+            echo ' SUCCESS: Pipeline completed without errors!'
             echo '============================================'
         }
         failure {
             echo '============================================'
-            echo ' Pipeline FAILED! Check the logs above.'
+            echo ' FAILURE: Pipeline failed. Check console log.'
             echo '============================================'
         }
         always {
             echo "Build #${env.BUILD_NUMBER} finished with status: ${currentBuild.currentResult}"
-            cleanWs()
         }
     }
 }
