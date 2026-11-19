@@ -64,10 +64,10 @@ java -jar target/event-management-1.0.0-shaded.jar
 
 | Resource | URL |
 |----------|-----|
-| 🌐 Web UI | http://localhost:8080 |
-| 📡 Events API | http://localhost:8080/api/events |
-| 👥 Registrations API | http://localhost:8080/api/registrations |
-| 📊 Dashboard API | http://localhost:8080/api/dashboard |
+| 🌐 Web UI | http://localhost:8081 |
+| 📡 Events API | http://localhost:8081/api/events |
+| 👥 Registrations API | http://localhost:8081/api/registrations |
+| 📊 Dashboard API | http://localhost:8081/api/dashboard |
 
 > **Note:** The SQLite database file `eventmanagement.db` is created automatically in the working directory on first run.
 
@@ -116,7 +116,7 @@ java -jar target/event-management-1.0.0-shaded.jar
 # Download Jenkins WAR
 wget https://get.jenkins.io/war-stable/latest/jenkins.war
 java -jar jenkins.war
-# Access at http://localhost:8080 (use a different port if conflict)
+# Access at http://localhost:8081 (defaulted to 8081 so Jenkins can use 8080)
 ```
 
 Or use the [Windows installer](https://www.jenkins.io/download/).

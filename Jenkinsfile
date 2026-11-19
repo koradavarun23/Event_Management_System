@@ -66,7 +66,7 @@ pipeline {
                 // Then start the new jar as a background service:
                 //   bat "start /B javaw -jar ${JAR_FILE}"
                 echo "Starting application (simulation)..."
-                echo "Application would be available at: http://localhost:8080"
+                echo "Application would be available at: http://localhost:8081"
                 echo "Deploy simulation complete."
             }
         }
