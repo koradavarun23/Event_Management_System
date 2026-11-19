@@ -107,6 +107,8 @@
                             </transformers>
                             <!-- Suppress the "dependency-reduced-pom" warning file -->
                             <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <shadedArtifactAttached>true</shadedArtifactAttached>
+                            <shadedClassifierName>shaded</shadedClassifierName>
                         </configuration>
                     </execution>
                 </executions>
