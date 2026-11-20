@@ -174,12 +174,14 @@ public class EventServlet extends HttpServlet {
     /** Convert an Event POJO to a JSONObject. */
     private JSONObject eventToJson(Event e) {
         JSONObject obj = new JSONObject();
-        obj.put("id",        e.getId());
-        obj.put("name",      e.getName());
-        obj.put("date",      e.getDate());
-        obj.put("venue",     e.getVenue());
-        obj.put("capacity",  e.getCapacity());
-        obj.put("createdAt", e.getCreatedAt());
+        obj.put("id",              e.getId());
+        obj.put("name",            e.getName());
+        obj.put("date",            e.getDate());
+        obj.put("venue",           e.getVenue());
+        obj.put("capacity",        e.getCapacity());
+        obj.put("createdAt",       e.getCreatedAt());
+        obj.put("registeredCount", e.getRegisteredCount());
+        obj.put("registered",      e.getRegisteredCount());
         return obj;
     }
 

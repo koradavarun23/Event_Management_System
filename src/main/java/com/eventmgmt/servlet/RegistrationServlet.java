@@ -63,6 +63,12 @@ public class RegistrationServlet extends HttpServlet {
                 studentId = student.getId();
             }
 
+            // --- Check duplicate registration ---
+            if (db.isStudentRegistered(studentId, eventId)) {
+                writeJson(resp, 409, error("Student (" + email + ") is already registered for this event."));
+                return;
+            }
+
             // --- Check capacity before registering ---
             var event = db.getEventById(eventId);
             if (event == null) {

@@ -922,7 +922,7 @@
       grid.innerHTML = events.map(function(ev) {
         var future     = isFuture(ev.date);
         var capacity   = ev.capacity || 100;
-        var registered = ev.registeredCount || 0;
+        var registered = (ev.registeredCount !== undefined) ? ev.registeredCount : (ev.registered || 0);
         var pct  = Math.min(100, Math.round((registered / capacity) * 100));
         var full = pct >= 100;
         return (

@@ -19,11 +19,11 @@ public class AppTest {
     public void testDatabaseManagerSingleton() {
         // Smoke test — always passes, confirming the test runner works.
         // Uncomment below once DatabaseManager is on the test classpath:
-        //
-        // DatabaseManager db1 = DatabaseManager.getInstance();
-        // DatabaseManager db2 = DatabaseManager.getInstance();
-        // assertNotNull("DatabaseManager instance must not be null", db1);
-        // assertSame("getInstance() must return the same object every time", db1, db2);
+        
+        DatabaseManager db1 = DatabaseManager.getInstance();
+        DatabaseManager db2 = DatabaseManager.getInstance();
+        assertNotNull("DatabaseManager instance must not be null", db1);
+        assertSame("getInstance() must return the same object every time", db1, db2);
         assertTrue(true);
     }
 
@@ -35,15 +35,15 @@ public class AppTest {
     public void testEventModelCreation() {
         // Smoke test — always passes.
         // Uncomment below to run real model assertions:
-        //
-        // com.eventmgmt.model.Event event = new com.eventmgmt.model.Event();
-        // event.setName("Tech Fest 2026");
-        // event.setVenue("Main Auditorium");
-        // event.setCapacity(200);
-        //
-        // assertEquals("Tech Fest 2026", event.getName());
-        // assertEquals("Main Auditorium", event.getVenue());
-        // assertEquals(200, event.getCapacity());
+        
+        com.eventmgmt.model.Event event = new com.eventmgmt.model.Event();
+        event.setName("Tech Fest 2026");
+        event.setVenue("Main Auditorium");
+        event.setCapacity(200);
+        
+        assertEquals("Tech Fest 2026", event.getName());
+        assertEquals("Main Auditorium", event.getVenue());
+        assertEquals(200, event.getCapacity());
         assertTrue(true);
     }
 
@@ -54,13 +54,13 @@ public class AppTest {
     public void testStudentModelCreation() {
         // Smoke test — always passes.
         // Uncomment below to run real model assertions:
-        //
-        // com.eventmgmt.model.Student student = new com.eventmgmt.model.Student();
-        // student.setName("Alice");
-        // student.setEmail("alice@college.edu");
-        //
-        // assertEquals("Alice", student.getName());
-        // assertEquals("alice@college.edu", student.getEmail());
+        
+        com.eventmgmt.model.Student student = new com.eventmgmt.model.Student();
+        student.setName("Alice");
+        student.setEmail("alice@college.edu");
+        
+        assertEquals("Alice", student.getName());
+        assertEquals("alice@college.edu", student.getEmail());
         assertTrue(true);
     }
 

@@ -12,28 +12,32 @@ public class Event {
     private String venue;
     private int    capacity;   // max attendees
     private String createdAt;  // ISO-8601 timestamp
+    private int    registeredCount; // active registered attendees
 
     // --- Getters ---
 
-    public int    getId()        { return id; }
-    public String getName()      { return name; }
-    public String getDate()      { return date; }
-    public String getVenue()     { return venue; }
-    public int    getCapacity()  { return capacity; }
-    public String getCreatedAt() { return createdAt; }
+    public int    getId()              { return id; }
+    public String getName()            { return name; }
+    public String getDate()            { return date; }
+    public String getVenue()           { return venue; }
+    public int    getCapacity()        { return capacity; }
+    public String getCreatedAt()       { return createdAt; }
+    public int    getRegisteredCount() { return registeredCount; }
 
     // --- Setters ---
 
-    public void setId(int id)              { this.id = id; }
-    public void setName(String name)       { this.name = name; }
-    public void setDate(String date)       { this.date = date; }
-    public void setVenue(String venue)     { this.venue = venue; }
-    public void setCapacity(int capacity)  { this.capacity = capacity; }
-    public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
+    public void setId(int id)                          { this.id = id; }
+    public void setName(String name)                   { this.name = name; }
+    public void setDate(String date)                   { this.date = date; }
+    public void setVenue(String venue)                 { this.venue = venue; }
+    public void setCapacity(int capacity)              { this.capacity = capacity; }
+    public void setCreatedAt(String createdAt)         { this.createdAt = createdAt; }
+    public void setRegisteredCount(int registeredCount) { this.registeredCount = registeredCount; }
 
     @Override
     public String toString() {
         return "Event{id=" + id + ", name='" + name + "', date='" + date +
-               "', venue='" + venue + "', capacity=" + capacity + "}";
+               "', venue='" + venue + "', capacity=" + capacity +
+               ", registeredCount=" + registeredCount + "}";
     }
 }

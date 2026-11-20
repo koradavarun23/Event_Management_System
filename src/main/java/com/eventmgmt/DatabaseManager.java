@@ -35,14 +35,8 @@ public class DatabaseManager {
         return instance;
     }
 
-    // -----------------------------------------------------------------------
-    // Database connection
-    // -----------------------------------------------------------------------
-
-    /** SQLite JDBC URL – creates eventmanagement.db in the working directory */
     private static final String DB_URL = "jdbc:sqlite:eventmanagement.db";
 
-    /** Returns a fresh connection from the JDBC driver */
     private Connection getConnection() throws SQLException {
         return DriverManager.getConnection(DB_URL);
     }
@@ -51,10 +45,6 @@ public class DatabaseManager {
     private String now() {
         return LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
     }
-
-    // -----------------------------------------------------------------------
-    // init() – called once from Main.java at startup
-    // -----------------------------------------------------------------------
 
     /**
      * Creates the three tables (events, students, registrations) if they do
@@ -81,7 +71,7 @@ public class DatabaseManager {
             stmt.executeUpdate(
                 "CREATE TABLE IF NOT EXISTS students (" +
                 "  id         INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "  name       TEXT NOT NULL," +
+                "  name       TEXT NOT NULL UNIQUE," +
                 "  email      TEXT UNIQUE," +
                 "  created_at TEXT" +
                 ")"
@@ -124,10 +114,15 @@ public class DatabaseManager {
         }
     }
 
-    /** Return all events ordered by newest first. */
+    /** Return all events ordered by newest first, with active registration counts. */
     public List<Event> getAllEvents() throws SQLException {
         List<Event> events = new ArrayList<>();
-        String sql = "SELECT * FROM events ORDER BY id DESC";
+        String sql =
+            "SELECT e.*, COUNT(CASE WHEN r.status = 'active' THEN 1 END) AS registered_count " +
+            "FROM events e " +
+            "LEFT JOIN registrations r ON e.id = r.event_id " +
+            "GROUP BY e.id " +
+            "ORDER BY e.id DESC";
 
         try (Connection conn = getConnection();
              Statement stmt = conn.createStatement();
@@ -142,7 +137,12 @@ public class DatabaseManager {
 
     /** Return one event by id, or null if not found. */
     public Event getEventById(int id) throws SQLException {
-        String sql = "SELECT * FROM events WHERE id = ?";
+        String sql =
+            "SELECT e.*, COUNT(CASE WHEN r.status = 'active' THEN 1 END) AS registered_count " +
+            "FROM events e " +
+            "LEFT JOIN registrations r ON e.id = r.event_id " +
+            "WHERE e.id = ? " +
+            "GROUP BY e.id";
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -172,6 +172,11 @@ public class DatabaseManager {
         e.setVenue(rs.getString("venue"));
         e.setCapacity(rs.getInt("capacity"));
         e.setCreatedAt(rs.getString("created_at"));
+        try {
+            e.setRegisteredCount(rs.getInt("registered_count"));
+        } catch (SQLException ignored) {
+            // column might not be present in basic projections
+        }
         return e;
     }
 
@@ -336,6 +341,19 @@ public class DatabaseManager {
             ps.setInt(1, eventId);
             ResultSet rs = ps.executeQuery();
             return rs.next() ? rs.getInt(1) : 0;
+        }
+    }
+
+    /** Check if a student is already actively registered for an event (prevents duplicates). */
+    public boolean isStudentRegistered(int studentId, int eventId) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM registrations WHERE student_id = ? AND event_id = ? AND status = 'active'";
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, studentId);
+            ps.setInt(2, eventId);
+            ResultSet rs = ps.executeQuery();
+            return rs.next() && rs.getInt(1) > 0;
         }
     }
 
