@@ -487,13 +487,6 @@
               <div class="lbl">Registrations</div>
             </div>
           </div>
-          <div class="stat-card">
-            <div class="stat-icon purple">🔮</div>
-            <div class="stat-info">
-              <div class="num" id="stat-upcoming">—</div>
-              <div class="lbl">Upcoming Events</div>
-            </div>
-          </div>
         </div>
 
         <div class="card">
@@ -861,7 +854,6 @@
       document.getElementById('stat-events').textContent        = (data.totalEvents        != null) ? data.totalEvents        : 0;
       document.getElementById('stat-students').textContent      = (data.totalStudents      != null) ? data.totalStudents      : 0;
       document.getElementById('stat-registrations').textContent = (data.totalRegistrations != null) ? data.totalRegistrations : 0;
-      document.getElementById('stat-upcoming').textContent      = (data.upcomingEvents     != null) ? data.upcomingEvents     : 0;
 
       var list   = document.getElementById('recent-events-list');
       var recent = data.recentEvents || [];
